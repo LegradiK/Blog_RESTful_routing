@@ -12,6 +12,9 @@
     {% block styles %}
     <!-- Load Bootstrap-Flask CSS here -->
     {{ bootstrap.load_css() }}
+    <!-- CKEditor -->
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name="blog_content")}}
     <link
       rel="icon"
       type="image/x-icon"
