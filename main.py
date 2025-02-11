@@ -101,14 +101,17 @@ def add_post():
 @app.route('/edit-post/<post_id>', methods=['GET','POST'])
 def edit_post(post_id):
     post_to_edit = db.get_or_404(BlogPost, post_id)
-    edit_form = BlogPost(
-        title=edit_form.title.data,
-        subtitle=edit_form.subtitle.data,
-        img_url=edit_form.img_url.data,
-        author=edit_form.author.data,
-        body=edit_form.body.data
-    )
-    return redirect('make-post.html', post=post_to_edit, form=edit_form)
+    edit_form = PostForm(obj=post_to_edit)
+    if edit_form.validate_on_submit():
+        post_to_edit.title=edit_form.title.data
+        post_to_edit.subtitle=edit_form.subtitle.data
+        post_to_edit.img_url=edit_form.img_url.data
+        post_to_edit.author=edit_form.author.data
+        post_to_edit.body=edit_form.body.data
+        db.session.commit()
+        return redirect(url_for('get_all_posts'))
+
+    return render_template('make-post.html', post=post_to_edit, form=edit_form)
 
 
 # TODO: delete_post() to remove a blog post from the database
