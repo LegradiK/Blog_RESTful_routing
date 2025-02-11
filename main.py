@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -27,6 +27,7 @@ def create_app():
     return app
 
 app = create_app()
+app.secret_key = "SECRET_KEY"
 
 # CONFIGURE TABLE
 class BlogPost(db.Model):
@@ -120,6 +121,7 @@ def delete_post(post_id):
     post_to_delete = db.get_or_404(BlogPost, post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
+    flash(f"Post '{post_to_delete.title}' is deleted successfully!", "success")
     return redirect(url_for('get_all_posts'))
 
 # Below is the code from previous lessons. No changes needed.

@@ -16,6 +16,30 @@
     </div>
   </div>
 </header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="modal fade" id="flashModal" tabindex="-1" aria-labelledby="flashModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="flashModalLabel">Notification</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <strong>{{ category.capitalize() }}!</strong> {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}
+
+
 <!-- Main Content-->
 <div class="container px-4 px-lg-5">
   <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -57,3 +81,16 @@
 </div>
 
 {% include "footer.html" %}
+
+<!-- Script to automatically show the flash modal -->
+<!-- Script to automatically show the flash modal -->
+{% if messages %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var flashModal = new bootstrap.Modal(document.getElementById('flashModal'), {
+        keyboard: false
+      });
+      flashModal.show();
+    });
+  </script>
+{% endif %}
